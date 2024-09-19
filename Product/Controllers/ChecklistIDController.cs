@@ -15,7 +15,7 @@ namespace Product.Controllers
         {
             try
             {
-                List<Checklist> data = new List<Checklist>();
+                List<ChecklistItem> data = new List<ChecklistItem>();
                 data = ChecklistItemView.SelectChecklistItem(checklistId);
                 return Ok(data);
             }
@@ -29,35 +29,76 @@ namespace Product.Controllers
         [Route("checklist/{checklistId}/item")]
         public IActionResult CreateChecklistItem(int checklistId, [FromBody] ChecklistItem checklistItem)
         {
-            return Ok(new { message = $"Item added to checklist {checklistId}." });
+            try
+            {
+                ChecklistItemView.InsertChecklistItem(checklistId, checklistItem);
+                return StatusCode(201, "Success");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         [Route("checklist/{checklistId}/item/{checklistItemId}")]
         public IActionResult GetChecklistItem(int checklistId, int checklistItemId)
         {
-            return Ok(new { message = $"Checklist item {checklistItemId} from checklist {checklistId} returned." });
+            try
+            {
+                List<ChecklistItem> data = new List<ChecklistItem>();
+                data = ChecklistItemView.SelectedChecklistItem(checklistId, checklistItemId);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         [Route("checklist/{checklistId}/item/{checklistItemId}")]
         public IActionResult UpdateChecklistItemStatus(int checklistId, int checklistItemId)
         {
-            return Ok(new { message = $"Checklist item {checklistItemId} updated." });
+            try
+            {
+                ChecklistItemView.UpdateChecklistItem(checklistId, checklistItemId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]
         [Route("checklist/{checklistId}/item/{checklistItemId}")]
         public IActionResult DeleteChecklistItem(int checklistId, int checklistItemId)
         {
-            return Ok(new { message = $"Checklist item {checklistItemId} deleted from checklist {checklistId}." });
+            try
+            {
+                ChecklistItemView.DeleteChecklistItem(checklistId, checklistItemId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
         [Route("checklist/{checklistId}/item/rename/{checklistItemId}")]
         public IActionResult RenameChecklistItem(int checklistId, int checklistItemId, [FromBody] ChecklistItem checklistItem)
         {
-            return Ok(new { message = $"Checklist item {checklistItemId} renamed in checklist {checklistId}." });
+            try
+            {
+                ChecklistItemView.RenameChecklistItem(checklistId, checklistItemId, checklistItem);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
