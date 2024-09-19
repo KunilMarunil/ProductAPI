@@ -1,17 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Product.Models;
+using Product.Views;
 
 namespace Product.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
+    [Authorize]
     public class ChecklistIDController : Controller
     {
         [HttpGet]
         [Route("checklist/{checklistId}/item")]
         public IActionResult GetAllChecklistItems(int checklistId)
         {
-            return Ok(new { message = $"All items for checklist {checklistId} returned." });
+            try
+            {
+                List<Checklist> data = new List<Checklist>();
+                data = ChecklistItemView.SelectChecklistItem(checklistId);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]

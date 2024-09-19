@@ -1,29 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Product.Models;
+using Product.Views;
 
 namespace Product.Controllers
 {
     [Route("checklist")]
     [ApiController]
+    [Authorize]
     public class ChecklistController : Controller
     {
         [HttpGet]
         public IActionResult GetAllChecklists()
         {
-            return Ok(new { message = "All checklists returned." });
+            try
+            {
+                List<Checklist> data = new List<Checklist>();
+                data = ChecklistView.SelectChecklist();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CreateChecklist([FromBody] Checklist checklist)
         {
-            return Ok(new { message = "Checklist created successfully." });
+            try
+            {
+                ChecklistView.InsertChecklist(checklist);
+                return StatusCode(201, "Success");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]
-        [Route("checklist/{checklistId}")]
+        [Route("{checklistId}")]
         public IActionResult DeleteChecklist(int checklistId)
         {
-            return Ok(new { message = "Checklist deleted successfully." });
+            try
+            {
+                ChecklistView.DeleteChecklist(checklistId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

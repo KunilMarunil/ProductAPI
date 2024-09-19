@@ -7,6 +7,7 @@ namespace Product.Controllers
 {
     [ApiController]
     [Route("api")]
+    [Authorize]
     public class LoginController : Controller
     {
         private static string conString = "";

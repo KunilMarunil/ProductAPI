@@ -7,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 IConfiguration configuration = builder.Configuration;
 Product.Models.CRUD.GetConfiguration(configuration);
-
+Product.Views.LoginView.GetConfiguration(configuration);
+Product.Views.JwtView.GetConfiguration(configuration);
+Product.Controllers.LoginController.GetConfiguration(configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -45,7 +47,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 
